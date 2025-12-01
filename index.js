@@ -40,7 +40,7 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await coffeesCollection.findOne(query);
-      res.send(result)
+      res.send(result);
     });
 
     // Create Coffees
@@ -48,6 +48,23 @@ async function run() {
       const newCoffee = req.body;
       console.log(newCoffee);
       const result = await coffeesCollection.insertOne(newCoffee);
+      res.send(result);
+    });
+
+    // Update Coffee -> PUT
+    app.put("/coffees/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const UpdatedCoffee = req.body;
+      const updateDoc = {
+        $set: UpdatedCoffee,
+      };
+      const result = await coffeesCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
       res.send(result);
     });
 
