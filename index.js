@@ -91,6 +91,19 @@ async function run() {
       const result = await usersCollection.insertOne(userProfile);
       res.send(result);
     });
+    // single data change for user
+    app.patch("/users", async (req, res) => {
+      // console.log(req.body);
+      const { email, lastSignInTime } = req.body;
+      const filter = { email: email };
+      const updatedDoc = {
+        $set: {
+          lastSignInTime: lastSignInTime,
+        },
+      };
+      const result = await usersCollection.updateOne(filter, updatedDoc);
+      res.send(result);
+    });
 
     // delete a user
     app.delete("/users/:id", async (req, res) => {
